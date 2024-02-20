@@ -79,7 +79,10 @@ class SaveRecording(tk.Frame):
         # default name is date_session_no._descriptor.csv
         current_date = date.today()
         self.data_handler.session_files.sort() # last value now has the highest index
-        max_index = int(self.data_handler.session_files[-1].split("_")[1])
+        try:
+            max_index = int(self.data_handler.session_files[-1].split("_")[1])
+        except IndexError:
+            max_index = 0
         return f"{current_date}_{max_index+1}_{len(self.data_handler.clients)}_Devices.csv"
 
     def save_file(self):

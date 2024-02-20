@@ -180,7 +180,7 @@ class UploadPage(tk.Frame):
         
         # Plot the data (adjust according to your data structure)
         ax.plot(df.iloc[:, 0], df.iloc[:, 1])
-        ax.set_title(f"Graph of {selected_file.split(".")[0]}")
+        ax.set_title(f'Graph of {selected_file.split(".")[0]}')
         ax.set_xlabel('Time (ms)') 
         ax.set_ylabel('Resistance')
         
@@ -403,7 +403,7 @@ def upload_files(bucket_name, file_path, object_name, tags:list, access_key, sec
 
         # attempt to fetch file for upload confirmation
         response = s3.head_object(Bucket=bucket_name, Key=object_name)
-        print(f"file upload {response["ResponseMetadata"]["HTTPStatusCode"]}")
+        print(f'file upload {response["ResponseMetadata"]["HTTPStatusCode"]}')
 
     except (BotoCoreError, ClientError) as error:
         # Handle AWS errors here
@@ -425,7 +425,7 @@ def upload_files(bucket_name, file_path, object_name, tags:list, access_key, sec
                 'TagSet':tag_set
                 }
             )
-            print(f"file tag {response["ResponseMetadata"]["HTTPStatusCode"]}")
+            print(f'file tag {response["ResponseMetadata"]["HTTPStatusCode"]}')
         except (BotoCoreError, ClientError) as tag_error:
             # Handle potential errors
-            print(f"Tagging failed: {tag_error}")
+            print(f'Tagging failed: {tag_error}')
