@@ -12,10 +12,6 @@ numpy==1.26.3
 packaging==23.2
 pandas==2.2.0
 pillow==10.2.0
-pyobjc-core==9.2
-pyobjc-framework-Cocoa==9.2
-pyobjc-framework-CoreBluetooth==9.2
-pyobjc-framework-libdispatch==9.2
 pyparsing==3.1.1
 python-dateutil==2.8.2
 pytz==2023.3.post1
