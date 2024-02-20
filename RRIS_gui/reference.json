@@ -1,0 +1,16 @@
+{
+    "filename": "somefilename",
+    "notes": "metadata or readme",
+    "data_config": {
+        "duration": 100,
+        "frequency": 50,
+        "n_devices": 5,
+        "devices": ["device_1","device_2","device_3"],
+        "data_types": [["resistance","angle"],["resistance","angle"],["resistance","angle"]]
+    },
+    "data":{
+        "device_1": [],
+        "device_2": [],
+        "device_3": []
+    }
+}
