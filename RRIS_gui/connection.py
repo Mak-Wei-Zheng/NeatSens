@@ -150,33 +150,38 @@ class GUIClient:
         return cal_val
         
     def res_notification_handler(self, sender, data):
-        value, = struct.unpack('<f', data)
+        resistance, timestamp = struct.unpack('fI', data)
         if self.data_handler.is_plotting:
-            self.y_values.append(value)
-            print(value)
+            self.y_values.append(resistance)
+            print(resistance)
             if self.data_handler.is_calibrated:
-                self.y_calibrated.append(self.get_calibrated_value(value))
-        self.curr_y = value
-        # print(value)
+                self.y_calibrated.append(self.get_calibrated_value(resistance))
 
-    def time_notification_handler(self, sender, data):
-        value = struct.unpack("<I", data)[0]
-        
-        if self.data_handler.is_plotting:
             if not self.reference_time:
-                self.reference_time = value
-            self.x_values.append(value-self.reference_time)
-            print(value)
-
-        self.curr_x = value
+                self.reference_time = timestamp
+            self.x_values.append(timestamp-self.reference_time)
+            print(timestamp)
+        self.curr_y = resistance
+        self.curr_x = timestamp
         # print(value)
+
+    # def time_notification_handler(self, sender, data):
+    #     value = struct.unpack("<I", data)[0]
+        
+    #     if self.data_handler.is_plotting:
+    #         if not self.reference_time:
+    #             self.reference_time = value
+    #         self.x_values.append(value-self.reference_time)
+    #         print(value)
+
+    #     self.curr_x = value
+    #     # print(value)
     
     async def get_xy(self,core_characteristic, time_characteristic):
         await self.client.start_notify(core_characteristic, self.res_notification_handler)
-        await self.client.start_notify(time_characteristic, self.time_notification_handler)
+        # await self.client.start_notify(time_characteristic, self.time_notification_handler)
 
     async def fetch_stream(self, core_characteristic, time_characteristic):
-        pass
         if self.client and self.client.is_connected:
             try:
                 await self.get_xy(core_characteristic,time_characteristic)
