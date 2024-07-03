@@ -190,12 +190,21 @@ class FixedStream(tk.Frame):
         counter = int(self.duration_entry.get())
         self.data_handler.is_plotting = True
         self.graph.update_plot()
+        
         while counter > 0:
-            self.countdown.set(str(round(counter,3)))
+            start_time = time.time()  # Record the start time
+            self.countdown.set(str(round(counter, 3)))
             self.start_button.config(textvariable=self.countdown)
             self.update()
-            counter -= 1/self.frame_rate
-            time.sleep(1/self.frame_rate)
+            
+            # Calculate the time taken for processing
+            elapsed_time = time.time() - start_time
+            counter -= 1 / self.frame_rate
+            
+            # Adjust the sleep time to maintain the frame rate
+            sleep_time = max(0, (1 / self.frame_rate) - elapsed_time)
+            time.sleep(sleep_time)
+        
         self.data_handler.is_plotting = False
         self.countdown.set("Start Stream")
         self.clear_button.config(state=tk.ACTIVE)
