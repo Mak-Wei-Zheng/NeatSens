@@ -29,6 +29,8 @@ from datetime import date
 import os
 import json
 
+r = 7
+reso = 1023
 
 save_dir = "save_lite"
 
@@ -111,18 +113,23 @@ class LiteClient:
         return cal_val
     
     def res_notification_handler(self, sender, data):
-        resistance, timestamp = struct.unpack('fI', data)
+        global r
+        global reso
+        res_1, time_1, res_2, time_2 = struct.unpack('fIfI', data)
+
         if self.parent.is_plotting:
-            self.y_values.append(resistance)
-            print(resistance)
+            self.y_values.append(res_1)
             if self.parent.is_calibrated:
-                self.y_calibrated.append(self.get_calibrated_value(resistance))
+                self.y_calibrated.append(self.get_calibrated_value(res_1))
+            self.y_values.append(res_2)
+            if self.parent.is_calibrated:
+                self.y_calibrated.append(self.get_calibrated_value(res_2))
 
             if not self.reference_time:
-                self.reference_time = timestamp
-            self.x_values.append(round((timestamp-self.reference_time)/1000,3))
-            print(timestamp)
-        self.curr_y = resistance
+                self.reference_time = time_1
+            self.x_values.append(round((time_1-self.reference_time)/1000,3))
+            self.x_values.append(round((time_2-self.reference_time)/1000,3))
+        self.curr_y = res_1
 
     # def time_notification_handler(self, sender, data):
     #     value = struct.unpack("<I", data)[0]

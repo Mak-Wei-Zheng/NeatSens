@@ -13,11 +13,9 @@ BLECharacteristic combinedChar(CHARACTERISTIC_UUID, BLERead | BLENotify, 5); // 
 
 uint8_t dataBuffer[5];
 
-void floatToHalfBytes(float value, uint8_t* byteArray) {
-  half_float::half hValue = half_float::half_cast<half_float::half>(value);
-  uint16_t* halfBytes = reinterpret_cast<uint16_t*>(&hValue);
-  byteArray[0] = (*halfBytes >> 8) & 0xFF;
-  byteArray[1] = *halfBytes & 0xFF;
+void floatToHalfBytes(float16 value, uint8_t* byteArray) {
+  byteArray[0] = (*value >> 8) & 0xFF;
+  byteArray[1] = *value & 0xFF;
 }
 
 void unsignedLongTo3Bytes(unsigned long value, uint8_t* byteArray) {

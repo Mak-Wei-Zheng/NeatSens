@@ -110,29 +110,29 @@ class LiteClient:
         cal_val = self.m*value + self.c
         return cal_val
     
-def res_notification_handler(self, sender, data):
-    # Unpack the 2-byte half-precision float and 3-byte timestamp
-    half_precision, timestamp_bytes = data[:2], data[2:]
-    
-    # Convert half-precision bytes to float
-    resistance = np.frombuffer(half_precision, dtype=np.float16)[0]
-    
-    # Convert 3-byte timestamp to integer
-    timestamp = int.from_bytes(timestamp_bytes, byteorder='big')
-    
-    if self.data_handler.is_plotting:
-        self.y_values.append(resistance)
-        print(resistance)
-        if self.data_handler.is_calibrated:
-            self.y_calibrated.append(self.get_calibrated_value(resistance))
+    def res_notification_handler(self, sender, data):
+        # Unpack the 2-byte half-precision float and 3-byte timestamp
+        half_precision, timestamp_bytes = data[:2], data[2:]
+        
+        # Convert half-precision bytes to float
+        resistance = np.frombuffer(half_precision, dtype=np.float16)[0]
+        
+        # Convert 3-byte timestamp to integer
+        timestamp = int.from_bytes(timestamp_bytes, byteorder='big')
+        
+        if self.parent.is_plotting:
+            self.y_values.append(resistance)
+            print(resistance)
+            if self.parent.is_calibrated:
+                self.y_calibrated.append(self.get_calibrated_value(resistance))
 
-        if not self.reference_time:
-            self.reference_time = timestamp
-        self.x_values.append(timestamp - self.reference_time)
-        print(timestamp)
-    
-    self.curr_y = resistance
-    self.curr_x = timestamp
+            if not self.reference_time:
+                self.reference_time = timestamp
+            self.x_values.append(timestamp - self.reference_time)
+            print(timestamp)
+        
+        self.curr_y = resistance
+        self.curr_x = timestamp
 
     # def time_notification_handler(self, sender, data):
     #     value = struct.unpack("<I", data)[0]

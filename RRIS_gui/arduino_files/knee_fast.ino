@@ -1,6 +1,6 @@
 #include <ArduinoBLE.h>
-#define r 47
-#define reso 1023
+// #define r 47
+// #define reso 1023
 
 const char* SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
 const char* CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"; // Combined characteristic for resistance and timestamp
@@ -14,7 +14,7 @@ float oldResistance = 0;  // last resistance reading from analog input
 long previousMillis = millis();  // last time the resistance level was checked, in ms
 uint8_t dataBuffer[8];
 
-void floatToByteArray(float value, uint8_t* byteArray) {
+void intToByteArray(int value, uint8_t* byteArray) {
   memcpy(byteArray, &value, sizeof(value));
 }
 
@@ -62,10 +62,9 @@ void loop() {
 void updateResistanceLevel() {
   int raw = analogRead(A2);
   long current_time = millis();
-  float resistance = (float)(r * raw) / (float)(reso - raw);
 
   // Pack resistance and timestamp into the data buffer
-  floatToByteArray(resistance, dataBuffer);
+  intToByteArray(raw, dataBuffer);
   longToByteArray(current_time, dataBuffer + 4);
 
   combinedChar.writeValue(dataBuffer, sizeof(dataBuffer));
